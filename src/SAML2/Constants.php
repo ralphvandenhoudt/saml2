@@ -252,6 +252,11 @@ class Constants
     const NS_MD = 'urn:oasis:names:tc:SAML:2.0:metadata';
 
     /**
+     * The namespace for the SAML 2 metadata.
+     */
+    const NS_XACML = 'urn:oasis:names:tc:xacml:2.0:context:schema:os';
+
+    /**
      * The namespace fox XML schema.
      */
     const NS_XS = 'http://www.w3.org/2001/XMLSchema';

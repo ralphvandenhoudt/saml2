@@ -221,6 +221,7 @@ class Utils
             $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
             $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);
             $xpCache->registerNamespace('saml_metadata', Constants::NS_MD);
+            $xpCache->registerNamespace('saml_xacml', Constants::NS_XACML);
             $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
             $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
         }

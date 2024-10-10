@@ -286,6 +286,7 @@ class Assertion extends SignedElement
         $this->parseConditions($xml);
         $this->parseAuthnStatement($xml);
         $this->parseAttributes($xml);
+        $this->parseAdviceAttributes($xml);
         $this->parseEncryptedAttributes($xml);
         $this->parseSignature($xml);
     }
@@ -553,6 +554,29 @@ class Assertion extends SignedElement
         }
     }
 
+    /**
+     * Parse advice attribute statements in assertion.
+     *
+     * @param \DOMElement $xml The XML element with the assertion.
+     * @throws \Exception
+     * @return void
+     */
+    private function parseAdviceAttributes(DOMElement $xml) : void
+    {
+        /** @var \DOMElement[] $attributes */
+        $attributes = Utils::xpQuery($xml, './saml_assertion:Advice/saml_assertion:Assertion/saml_assertion:Statement/saml_xacml:Request/saml_xacml:Resource/saml_xacml:Attribute');
+        foreach ($attributes as $attribute) {
+            if (!$attribute->hasAttribute('AttributeId')) {
+                throw new \Exception('Missing AttributeId on <saml_xacml:Attribute> element.');
+            }
+            $name = $attribute->getAttribute('AttributeId');
+
+            if (!array_key_exists($name, $this->attributes)) {
+                $this->parseAttributeValue($attribute, $name);
+            }
+        }
+    }
+
 
     /**
      * @param \DOMNode $attribute
@@ -562,7 +586,7 @@ class Assertion extends SignedElement
     private function parseAttributeValue(DOMNode $attribute, string $attributeName) : void
     {
         /** @var \DOMElement[] $values */
-        $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+        $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue|./saml_xacml:AttributeValue');
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
